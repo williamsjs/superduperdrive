@@ -1,25 +1,29 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
-public class File {
+public class File implements DefaultModel {
 
-    private int id;
+    private int fileId;
 
     private String filename;
 
     private String contentType;
 
-    private String fileSize;
+    private Long fileSize;
 
     private int userId;
 
-    private String fileData;
+    private byte[] fileData;
 
     public int getId() {
-        return id;
+        return fileId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
     public String getFilename() {
@@ -38,11 +42,11 @@ public class File {
         this.contentType = contentType;
     }
 
-    public String getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -54,11 +58,11 @@ public class File {
         this.userId = userId;
     }
 
-    public String getFileData() {
+    public byte[] getFileData() {
         return fileData;
     }
 
-    public void setFileData(String fileData) {
+    public void setFileData(byte[] fileData) {
         this.fileData = fileData;
     }
 }

@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,8 @@ public class NoteController extends DefaultController<Note> {
     }
 
     @PostMapping("/notes")
-    public RedirectView insertNote(Note note, Principal principal) {
-        return super.insert(note, principal);
+    public RedirectView saveNote(Note note, Principal principal, Model model) {
+        return super.save(note, principal, model);
     }
 
     @GetMapping("/notes/{noteId}")

@@ -12,9 +12,9 @@ public interface CredentialMapper extends UserJoinMapper<Credential> {
 
     String getByUserId = "SELECT * FROM CREDENTIALS WHERE userid = #{userId}";
 
-    String insert = "INSERT INTO CREDENTIALS (url, username, password, userid) VALUES (#{url}, #{username}, #{password}, #{userId})";
+    String insert = "INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES (#{url}, #{username}, #{key}, #{password}, #{userId})";
 
-    String update = "UPDATE CREDENTIALS SET url=#{url}, username=#{username}, password=#{password} WHERE credentialid = #{credentialId}";
+    String update = "UPDATE CREDENTIALS SET url=#{url}, username=#{username}, key=#{key}, password=#{password} WHERE credentialid = #{credentialId}";
 
     String delete = "DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId}";
 
