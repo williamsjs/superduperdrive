@@ -34,13 +34,16 @@ public class FileService extends DefaultService<File> {
 
         for (File downloadedFile : files) {
             if (file.getFilename().equals(downloadedFile.getFilename())) {
-                return downloadedFile.getFilename() + " already exists.  Please choose another filename";
+                return "Error: " + downloadedFile.getFilename() + " already exists.  Please choose another filename";
             }
         }
 
-        super.save(file, userId);
-        return null;
+        return super.save(file, userId);
 
+    }
+
+    public String getItemName() {
+        return "File";
     }
 
 }

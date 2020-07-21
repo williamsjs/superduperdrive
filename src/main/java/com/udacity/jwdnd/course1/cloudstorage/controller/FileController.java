@@ -4,7 +4,6 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
@@ -23,9 +22,9 @@ public class FileController extends DefaultController<File> {
     }
 
     @PostMapping("/files")
-    public RedirectView saveFile(@RequestParam("fileUpload") MultipartFile fileUpload, Principal principal, Model model) throws IOException {
+    public RedirectView saveFile(@RequestParam("fileUpload") MultipartFile fileUpload, Principal principal) throws IOException {
         File file = FileService.parseFileUpload(fileUpload);
-        return super.save(file, principal, model);
+        return super.save(file, principal);
     }
 
     @GetMapping("/files/{fileId}")

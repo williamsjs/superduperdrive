@@ -52,4 +52,8 @@ public class CredentialService extends DefaultService<Credential> {
         credential.setPassword(encryptedPassword);
     }
 
+    public String getItemName() {
+        return "Credential";
+    }
+
 }

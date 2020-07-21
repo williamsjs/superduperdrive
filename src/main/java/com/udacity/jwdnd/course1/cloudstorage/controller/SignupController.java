@@ -3,11 +3,13 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller()
 @RequestMapping("/signup")
@@ -25,7 +27,7 @@ public class SignupController {
     }
 
     @PostMapping()
-    public String signupUser(@ModelAttribute User user, Model model) {
+    public ModelAndView signupUser(@ModelAttribute User user, ModelMap modelMap) {
         String signupError = null;
 
         if (!userService.isUsernameAvailable(user.getUsername())) {
@@ -40,11 +42,10 @@ public class SignupController {
         }
 
         if (signupError == null) {
-            model.addAttribute("signupSuccess", true);
+            return new ModelAndView(new RedirectView("/login"), new ModelMap().addAttribute("signupSuccess", true));
         } else {
-            model.addAttribute("signupError", signupError);
+            modelMap.addAttribute("signupError", signupError);
+            return new ModelAndView("/signup", modelMap);
         }
-
-        return "signup";
     }
 }

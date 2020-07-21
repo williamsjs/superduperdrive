@@ -24,16 +24,17 @@ public abstract class DefaultService<T extends DefaultModel> {
             update(t);
         }
 
-        return null;
+        return getItemName() + " saved successfully!";
     }
-
 
     public void add(T t) {
         mapper.insert(t);
     }
 
-    public void delete(int id) {
+    public String delete(int id) {
         mapper.delete(id);
+
+        return getItemName() + " has been deleted";
     }
 
     public void update(T t) {
@@ -47,5 +48,7 @@ public abstract class DefaultService<T extends DefaultModel> {
     public T getById(int id) {
         return (T) mapper.getById(id);
     }
+
+    protected abstract String getItemName();
 
 }

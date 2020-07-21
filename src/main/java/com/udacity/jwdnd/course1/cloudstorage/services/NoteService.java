@@ -11,4 +11,8 @@ public class NoteService extends DefaultService<Note> {
         super(noteMapper);
     }
 
+    public String getItemName() {
+        return "Note";
+    }
+
 }

@@ -5,7 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.DefaultService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
@@ -22,19 +21,19 @@ public abstract class DefaultController<T extends DefaultModel> {
         this.userService = userService;
     }
 
-    protected RedirectView save(T t, Principal principal, Model model) {
+    protected RedirectView save(T t, Principal principal) {
         User user = userService.getByUsername(principal.getName());
-        String error = service.save(t, user.getId());
+        String message = service.save(t, user.getId());
 
-        if (error != null) {
-            return new RedirectView("/home?error=" + error);
+        if (message != null) {
+            return new RedirectView("/home?message=" + message);
         }
 
         return new RedirectView("/home");
     }
 
     protected RedirectView delete(int id) {
-        service.delete(id);
-        return new RedirectView("/home");
+        String message = service.delete(id);
+        return new RedirectView("/home?message=" + message);
     }
 }
