@@ -50,6 +50,10 @@ public class HomePage {
     @FindBy(css="#save-note-changes")
     private WebElement noteSubmit;
 
+
+    @FindBy(css=".credential-username")
+    private WebElement credentialUsername;
+
     @FindBy(css=".credential-password")
     private WebElement credentialPassword;
 
@@ -61,7 +65,6 @@ public class HomePage {
 
     @FindBy(css="#close-credential-modal")
     private WebElement credentialModalCloseButton;
-
 
     public HomePage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
@@ -91,7 +94,30 @@ public class HomePage {
         return noteTitle.getText();
     }
 
+    public String editNote(WebDriver driver) {
+        notesTab.click();
+        WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(editButton));
+        editButton.click();
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(noteTitleInput));
+
+        noteTitleInput.clear();
+        noteDescriptionInput.clear();
+        noteTitleInput.sendKeys("Title Example Edited");
+        noteDescriptionInput.sendKeys("Description Example Edited");
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(By.id("save-note-changes")));
+
+        noteSubmit.click();
+
+        webDriverWait.until(ExpectedConditions.visibilityOf(noteTitle));
+        return noteTitle.getText();
+    }
+
     public boolean deleteNote(WebDriver driver) {
+        notesTab.click();
         WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
 
         webDriverWait.until(ExpectedConditions.elementToBeClickable(deleteButton));
@@ -121,8 +147,32 @@ public class HomePage {
 
         credentialSubmit.click();
 
-        webDriverWait.until(ExpectedConditions.visibilityOf(credentialPassword));
-        return credentialPassword.getText();
+        webDriverWait.until(ExpectedConditions.visibilityOf(credentialUsername));
+        return credentialUsername.getText();
+    }
+
+    public String editCredential(WebDriver driver) {
+        credentialsTab.click();
+        WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(editButton));
+
+        editButton.click();
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(credentialUrlInput));
+
+        credentialUrlInput.clear();
+        credentialUsernameInput.clear();
+        credentialPasswordInput.clear();
+        credentialUrlInput.sendKeys("facebook.com");
+        credentialUsernameInput.sendKeys("facebookusername");
+        credentialPasswordInput.sendKeys("facebookpassword");
+
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(credentialSubmit));
+
+        credentialSubmit.click();
+
+        webDriverWait.until(ExpectedConditions.visibilityOf(credentialUsername));
+        return credentialUsername.getText();
     }
 
     public String checkPassword(WebDriver driver) {
@@ -136,18 +186,23 @@ public class HomePage {
         return credentialPasswordInput.getAttribute("value");
     }
 
+    public String checkHashedPassword() {
+        return credentialPassword.getText();
+    }
+
     public void closeModal() {
         credentialModalCloseButton.click();
     }
 
     public boolean deleteCredential(WebDriver driver) {
+        credentialsTab.click();
         WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
 
         webDriverWait.until(ExpectedConditions.elementToBeClickable(deleteButton));
         deleteButton.click();
 
         try {
-            return credentialPassword.isDisplayed();
+            return credentialUsername.isDisplayed();
         } catch (NoSuchElementException e) {
             return true;
         }

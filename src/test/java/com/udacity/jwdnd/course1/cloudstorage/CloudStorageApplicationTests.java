@@ -11,12 +11,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
 	private int port;
 
 	private WebDriver driver;
+
+	private final String username = "Scott";
+
+	private final String password = "password";
 
 	public String baseURL;
 
@@ -39,88 +44,111 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(1)
 	public void loginLogout() {
-		String baseUrl = "http://localhost:" + this.port;
-
-		driver.get(baseUrl + "/login");
+		driver.get(baseURL + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 
-		driver.get(baseUrl + "/home");
+		driver.get(baseURL + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 
-		driver.get(baseUrl + "/signup");
+		driver.get(baseURL + "/signup");
 		Assertions.assertEquals("Sign Up", driver.getTitle());
-
-		String username = "Scott";
-		String password = "password";
 
 		SignupPage signupPage = new SignupPage(driver);
 		signupPage.signup("Scott", "Williams", username, password);
 
-		driver.get(baseUrl + "/login");
+		driver.get(baseURL + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.login(username, password);
 
-		driver.get(baseUrl + "/home");
+		driver.get(baseURL + "/home");
 		HomePage homePage = new HomePage(driver);
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		homePage.logout();
 
-		driver.get(baseUrl + "/home");
+		driver.get(baseURL + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
-
 	}
 
 	@Test
-	public void noteWorkflow() {
-		String baseUrl = "http://localhost:" + this.port;
-
-		driver.get(baseUrl + "/signup");
-		Assertions.assertEquals("Sign Up", driver.getTitle());
-
-		String username = "Scott";
-		String password = "password";
-
-		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signup("Scott", "Williams", username, password);
-
-		driver.get(baseUrl + "/login");
+	@Order(2)
+	public void addNote() {
+		driver.get(baseURL + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.login(username, password);
 
-		driver.get(baseUrl + "/home");
+		driver.get(baseURL + "/home");
 		HomePage homePage = new HomePage(driver);
 
 		Assertions.assertEquals("Title Example", homePage.addNote(driver));
+	}
+
+	@Test
+	@Order(3)
+	public void editNote() {
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+
+		driver.get(baseURL + "/home");
+		HomePage homePage = new HomePage(driver);
+
+		Assertions.assertEquals("Title Example Edited", homePage.editNote(driver));
+	}
+
+	@Test
+	@Order(4)
+	public void deleteNote() {
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+
+		driver.get(baseURL + "/home");
+		HomePage homePage = new HomePage(driver);
 
 		Assertions.assertTrue(homePage.deleteNote(driver));
 	}
 
 	@Test
-	public void credentialWorkflow() {
-		String baseUrl = "http://localhost:" + this.port;
-
-		driver.get(baseUrl + "/signup");
-		Assertions.assertEquals("Sign Up", driver.getTitle());
-
-		String username = "Scott";
-		String password = "password";
-
-		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signup("Scott", "Williams", username, password);
-
-		driver.get(baseUrl + "/login");
+	@Order(5)
+	public void addCredential() {
+		driver.get(baseURL + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.login(username, password);
 
-		driver.get(baseUrl + "/home");
+		driver.get(baseURL + "/home");
 		HomePage homePage = new HomePage(driver);
 
-		Assertions.assertNotEquals("badpassword", homePage.addCredential(driver));
+		Assertions.assertEquals("testusername", homePage.addCredential(driver));
 		Assertions.assertEquals("badpassword", homePage.checkPassword(driver));
+	}
 
-		homePage.closeModal();
+	@Test
+	@Order(6)
+	public void editCredential() {
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+
+		driver.get(baseURL + "/home");
+		HomePage homePage = new HomePage(driver);
+
+		Assertions.assertEquals("facebookusername", homePage.editCredential(driver));
+		Assertions.assertNotEquals("facebookpassword", homePage.checkHashedPassword());
+	}
+
+	@Test
+	@Order(7)
+	public void deleteCredential() {
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+
+		driver.get(baseURL + "/home");
+		HomePage homePage = new HomePage(driver);
+
 		Assertions.assertTrue(homePage.deleteCredential(driver));
 	}
 
